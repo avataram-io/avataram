@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avataram</title>
+    <!-- Include Bootstrap CSS if you're using Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <style>
+        .preview-container {
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 20px;
+        }
+        .preview-item {
+          margin: 10px;
+        }
+        img, audio {
+          max-width: 200px;
+          max-height: 200px;
+        }
+        .btn {
+        background-color: DodgerBlue;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 15px;
+        }
+
+        /* Darker background on mouse-over */
+        .btn:hover {
+        background-color: RoyalBlue;
+        }
+      </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center">Image to Video Generator</h2>
+    <form action="/process" method="post" id="upload-form" enctype="multipart/form-data">
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>Upload Image</h4>
+                <input type="file" name="source_image" id="image-input" accept="image/*" class="form-control mb-3" onchange="previewFile('image')">
+                <div id="image-preview-container" class="preview-container"></div>
+            </div>
+            <!-- <div id="preview-container"></div> -->
+            <div class="col-md-6">
+                <h4>Upload Audio</h4>
+                <input type="file" name='driven_audio' id="audio-input" accept="audio/*" class="form-control mb-3"  onchange="previewFile('audio')">
+                <div id="audio-preview-container" class="preview-container"></div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-6">
+                <h4>Text to Speech</h4>
+                <textarea id="inputText" class="form-control mb-3" placeholder="Enter text for TTS"></textarea>
+                <button class="btn btn-primary" onclick="generateAudio()">Generate Audio</button>
+            </div>
+        </div> -->
+        <div class="row mt-4">
+            <input type="submit"  class="btn btn-primary" value="Generate Video">
+            <!-- <div><button class="btn btn-primary" onclick="generateVideo()">Generate Video</button></div> -->
+        </div>
+    </form>
+    
+
+
+        <!-- <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>Settings</h4> 
+            <label for="poseStyle">Pose Style</label>
+                <input type="range" id="poseStyle" min="0" max="46" value="0" class="form-control mb-3">
+                
+                <label for="sizeOfImage">Face Model Resolution</label>
+                <select id="sizeOfImage" class="form-control mb-3">
+                    <option value="256">256</option>
+                    <option value="512">512</option>
+                </select> 
+                <button class="btn btn-primary" onclick="generateVideo()">Generate Video</button>
+
+                
+            </div><br><br>
+            
+        </div> -->
+        {% if result_video %}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h4>Generated Video Result:-</h4>
+                <video controls width="640" height="480" class="mb-3">
+                    <source src="{{result_video}}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <a href="{{result_video}}" download="downloaded-video.mp4"><button class="btn"><i class="fa fa-download"></i> Download</button></a>
+                <!-- <video id="generatedVideo"controls class="mb-3"></video> -->
+            </div>
+        </div>
+        {% else %}
+        <p>No result video available.</p>
+        {% endif %}
+
+</div>
+
+<!-- Include Bootstrap JS if you're using Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function previewFile(type) {
+      var input;
+      if (type === 'image') {
+        input = document.getElementById('image-input');
+      } else if (type === 'audio') {
+        input = document.getElementById('audio-input');
+      }
+
+      var containerId = type === 'image' ? 'image-preview-container' : 'audio-preview-container';
+      var container = document.getElementById(containerId);
+      container.innerHTML = ''; // Clear previous previews
+
+      var file = input.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          if (type === 'image') {
+            var img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'preview-item';
+            container.appendChild(img);
+          } else if (type === 'audio') {
+            var audio = document.createElement('audio');
+            audio.src = e.target.result;
+            audio.controls = true;
+            audio.className = 'preview-item';
+            container.appendChild(audio);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+
+</body>
+
+</html>

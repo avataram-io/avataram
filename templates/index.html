@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SadTalker Web Interface</title>
+</head>
+<body>
+    <h1>SadTalker Web Interface</h1>
+    <form action="/process" method="post" enctype="multipart/form-data">
+        <input type="file" name="source_image" accept="image/*" required>
+        <input type="file" name="driven_audio" accept="audio/*" required>
+      
+        <label for="pose_style">Pose Style:</label>
+        <input type="number" name="pose_style" value="0" min="0" max="46" required>
+      
+        <label for="size_of_image">Size of Image:</label>
+        <input type="number" name="size_of_image" value="512" min="256" max="512" required>
+      
+        <label for="preprocess_type">Preprocess Type:</label>
+        <select name="preprocess_type" required>
+          <option value="crop">Crop</option>
+          <option value="resize">Resize</option>
+          <option value="full" selected>Full</option>
+          <!-- Add other preprocess types as needed -->
+        </select>
+      
+        <label for="is_still_mode">Still Mode:</label>
+        <input type="checkbox" name="is_still_mode">
+      
+        <label for="enhancer">Use GFPGAN as Face Enhancer:</label>
+        <input type="checkbox" name="enhancer">
+      
+        <input type="submit" value="Generate">
+      </form>
+</body>
+</html>
